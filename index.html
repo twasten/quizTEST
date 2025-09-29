@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Платформа для создания тестов, опросов, анкет с AI-ассистентом.>
-    <title>SEIM | AI-ассистент</title>
+    <meta name="description" content="Политический компас 3D - определите свою идеологическую позицию по трём осям">
+    <title>Политические координаты | Образовательный проект</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         :root {
-            --primary: #4A90E2;
-            --primary-dark: #357ABD;
-            --accent: #50E3C2;
+            --primary: #FF9A8B;
+            --primary-dark: #FF6B6B;
+            --accent: #4ECDC4;
             --success: #A0E7E5;
             --warning: #FFD3B6;
-            --background: #F8F9FA;
+            --background: #FFF8F0;
             --surface: #FFFFFF;
-            --text-primary: #2C3E50;
-            --text-secondary: #6C757D;
-            --border: #E0E6ED;
+            --text-primary: #2E5266;
+            --text-secondary: #6E7E85;
+            --border: #E8D5C4;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             --transition: all 0.3s ease;
             --nav-bg: rgba(255, 255, 255, 0.95);
-            --hero-bg: linear-gradient(135deg, #4A90E2 0%, #50E3C2 100%);
+            --hero-bg: linear-gradient(135deg, #FF9A8B 0%, #FF6B6B 100%);
+            --gold: #FFD700;
             --axis-x: #4361ee;
             --axis-y: #f72585;
             --axis-z: #ffd166;
@@ -57,6 +58,10 @@
             box-shadow: var(--shadow);
         }
 
+        .navbar.scrolled {
+            padding: 10px 0;
+        }
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -77,6 +82,10 @@
             gap: 10px;
         }
 
+        .logo:hover {
+            color: var(--accent);
+        }
+
         .nav-menu {
             display: flex;
             list-style: none;
@@ -94,8 +103,27 @@
         }
 
         .nav-link:hover {
-            background: rgba(74, 144, 226, 0.1);
+            background: rgba(255, 154, 139, 0.1);
             color: var(--primary-dark);
+        }
+
+        .language-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .language-button:hover {
+            background: rgba(255, 154, 139, 0.1);
+            transform: translateY(-2px);
         }
 
         /* Главная секция */
@@ -142,15 +170,38 @@
             font-weight: 600;
             font-size: 1.1rem;
             transition: var(--transition);
-            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.3);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
             border: none;
             cursor: pointer;
-            margin: 10px;
         }
 
         .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(74, 144, 226, 0.4);
+            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        .language-switch {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .language-switch:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         /* Секции контента */
@@ -171,6 +222,14 @@
             text-align: center;
             margin-bottom: 60px;
             color: var(--primary-dark);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .cards-grid {
@@ -186,8 +245,15 @@
             border-radius: 20px;
             box-shadow: var(--shadow);
             transition: var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
             position: relative;
             border: 1px solid var(--border);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .card:hover {
@@ -204,140 +270,13 @@
             gap: 10px;
         }
 
-        /* Секция конструктора */
-        .constructor-section {
-            background: linear-gradient(135deg, rgba(80, 227, 194, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
-        }
-
-        .constructor-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: var(--surface);
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
+        .card p {
+            line-height: 1.7;
             color: var(--text-primary);
-            font-size: 18px;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 15px 20px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 17px;
-            transition: var(--transition);
-            background: #fdfdfd;
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
-            outline: none;
+            font-size: 1.15rem;
         }
 
-        .question-builder {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 25px;
-            margin: 20px 0;
-            border-left: 4px solid var(--primary);
-        }
-
-        .question-item {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 15px 0;
-            border: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .question-text {
-            flex-grow: 1;
-            margin-right: 15px;
-        }
-
-        .remove-question {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 12px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .remove-question:hover {
-            background: #e63946;
-        }
-
-        /* AI-ассистент */
-        .ai-assistant {
-            background: #f0f7ff;
-            border-radius: 16px;
-            padding: 25px;
-            margin: 25px 0;
-            border-left: 4px solid var(--accent);
-        }
-
-        .ai-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .ai-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: white;
-            font-weight: bold;
-        }
-
-        .ai-suggestions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .ai-suggestion {
-            background: white;
-            border: 1px solid var(--border);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .ai-suggestion:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* Секция теста */
+        /* Тест секция */
         .test-section {
             background: linear-gradient(135deg, rgba(255, 211, 182, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
             padding: 80px 0;
@@ -449,12 +388,28 @@
             border-radius: 50%;
             background: var(--primary);
             cursor: pointer;
-            box-shadow: 0 3px 10px rgba(74, 144, 226, 0.4);
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.4);
             border: 3px solid white;
             transition: var(--transition);
         }
 
         .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.4);
+            border: 3px solid white;
+            transition: var(--transition);
+        }
+
+        .slider::-moz-range-thumb:hover {
             transform: scale(1.1);
             background: var(--primary-dark);
         }
@@ -480,16 +435,33 @@
             justify-content: center;
         }
 
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-button:not(:disabled):hover {
+            transform: translateY(-2px);
+        }
+
         #prevBtn {
             background: white;
             color: var(--primary);
             border: 0px solid var(--primary);
         }
 
+        #prevBtn:hover:not(:disabled) {
+            background: #fdf0f0;
+        }
+
         #nextBtn {
             background: white;
             color: var(--primary);
             border: 0px solid var(--primary);
+        }
+
+        #nextBtn:hover:not(:disabled) {
+            background: #fdf0f0;
         }
 
         .required-message {
@@ -502,7 +474,229 @@
             font-size: 17px;
         }
 
-        /* Результаты */
+        .info-section {
+            background: #fdf7f2;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-title {
+            font-size: 22px;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .info-text {
+            font-size: 17px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        /* Новые стили */
+        .demographic-form {
+            background: white;
+            padding: 35px 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            max-width: 700px;
+            margin: 0 auto;
+            border: 1px solid var(--border);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 18px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 17px;
+            transition: var(--transition);
+            background: #fdfdfd;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
+            outline: none;
+        }
+        
+        .reset-button {
+            background: #f8f9fa;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 14px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        
+        .reset-button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .export-button {
+            background: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        
+        .export-button:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .interpretation-card {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .interpretation-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .interpretation-title {
+            font-size: 26px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        
+        .interpretation-body {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+        
+        .interpretation-body ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+        
+        .interpretation-body li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .interpretation-body li .axis-icon {
+            min-width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 16px;
+            margin-top: 4px;
+        }
+        
+        .interpretation-body li.x-axis .axis-icon {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--axis-x);
+        }
+        
+        .interpretation-body li.y-axis .axis-icon {
+            background: rgba(247, 37, 133, 0.1);
+            color: var(--axis-y);
+        }
+        
+        .interpretation-body li.z-axis .axis-icon {
+            background: rgba(255, 209, 102, 0.1);
+            color: var(--axis-z);
+        }
+        
+        .interpretation-body strong {
+            color: var(--primary);
+        }
+        
+        .interpretation-body .ideology-highlight {
+            background: #fdf7f2;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #graphContainer {
+            width: 100%;
+            max-width: 1000px;
+            height: 700px;
+            margin: 30px auto;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            display: none;
+            border: 1px solid var(--border);
+        }
+
+        .graph-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .graph-title {
+            font-size: 26px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .graph-description {
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+        }
+
         .results-container {
             display: flex;
             flex-wrap: wrap;
@@ -560,63 +754,74 @@
             font-weight: 500;
             color: var(--text-secondary);
         }
-
-        /* Термометр для температурной шкалы */
-        .thermometer {
-            width: 80px;
-            height: 300px;
-            background: #f0f0f0;
-            border-radius: 40px;
-            margin: 0 auto 30px;
-            position: relative;
-            overflow: hidden;
-            border: 3px solid #ddd;
+        
+        .axis-description {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 15px;
+            line-height: 1.5;
         }
-
-        .thermometer-fill {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: linear-gradient(to top, #1e90ff, #ff4500);
-            border-radius: 40px;
-            transition: height 1s ease;
-        }
-
-        .thermometer-bulb {
-            width: 100px;
-            height: 100px;
-            background: #ff4500;
-            border-radius: 50%;
-            position: absolute;
-            bottom: -50px;
-            left: -10px;
-            z-index: 1;
-        }
-
-        .temperature-marks {
-            position: absolute;
-            right: -40px;
-            top: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .temperature-mark {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .temperature-value {
+        
+        .ideology-match {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
             text-align: center;
-            font-size: 48px;
+        }
+        
+        .match-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .match-value {
+            font-size: 28px;
             font-weight: 700;
-            margin: 20px 0;
             color: var(--primary-dark);
         }
+        
+        .match-name {
+            font-size: 22px;
+            font-weight: 600;
+            margin-top: 10px;
+            color: var(--primary);
+        }
 
+        /* Кнопка разработчика */
+        .dev-mode-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2E5266;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        
+        .dev-mode-btn:hover {
+            opacity: 1;
+        }
+        
         /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
         @keyframes fadeInUp {
             from { 
                 opacity: 0; 
@@ -628,18 +833,135 @@
             }
         }
 
-        @keyframes cardAppear {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-5px); }
             40%, 80% { transform: translateX(5px); }
         }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes slideOut {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-100px); }
+        }
+        
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateY(100px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Секция обратной связи */
+        .feedback-section {
+            background: var(--surface);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .feedback-title {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .feedback-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .contact-info {
+            background: #fdf7f2;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 25px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .contact-info p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+        
+        .contact-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            margin: 15px auto;
+            max-width: 400px;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+        
+        .contact-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 154, 139, 0.05);
+            border-color: var(--primary);
+        }
+        
+        .contact-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            fill: var(--primary);
+        }
+        
+        .contact-links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
 
         /* Адаптивность */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .question-text {
+                font-size: 22px;
+            }
+            
+            #graphContainer {
+                height: 600px;
+                padding: 20px;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
@@ -665,12 +987,97 @@
                 grid-template-columns: 1fr;
             }
             
-            .constructor-container {
-                padding: 25px 20px;
+            .button-container {
+                flex-direction: column;
             }
             
             .question-text {
                 font-size: 20px;
+            }
+            
+            .slider-value {
+                font-size: 18px;
+            }
+            
+            .test-container {
+                padding: 30px 20px;
+            }
+            
+            .demographic-form {
+                padding: 25px 20px;
+            }
+            
+            .form-control {
+                padding: 14px 18px;
+            }
+            
+            #graphContainer {
+                height: 500px;
+                padding: 15px;
+            }
+            
+            .feedback-section {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 70px 0;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 40px;
+            }
+            
+            .question-text {
+                font-size: 19px;
+            }
+            
+            .slider-labels {
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+            
+            #graphContainer {
+                height: 400px;
+            }
+            
+            .graph-title {
+                font-size: 22px;
+            }
+            
+            .language-switch {
+                top: 70px;
+                left: 10px;
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+            
+            .interpretation-title {
+                font-size: 22px;
+            }
+            
+            .interpretation-body {
+                font-size: 16px;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+            
+            .feedback-title {
+                font-size: 1.8rem;
+            }
+            
+            .contact-info {
+                padding: 20px;
             }
         }
     </style>
@@ -679,102 +1086,158 @@
     <!-- Навигация -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">SEIM</a>
+            <a href="#" class="logo">Политическая позиция</a>
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Главная</a></li>
-                <li><a href="#constructor" class="nav-link">Конструктор</a></li>
-                <li><a href="#test" class="nav-link">Подписка</a></li>
-                <li><a href="#results" class="nav-link">Результаты</a></li>
+                <li><a href="#about" class="nav-link">О проекте</a></li>
+                <li><a href="#theory" class="nav-link">Теория</a></li>
+                <li><a href="#test" class="nav-link">Тест</a></li>
+                <li><a href="#feedback" class="nav-link">Контакты</a></li>
+                <li>
+                    <button class="language-button" onclick="window.location.href='index_en.html'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 3.956h-.049l-.679 2.022H6.18z"/>
+                            <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm7.138 9.995c.193.301.402.583.63.846-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6.066 6.066 0 0 1-.415-.492 1.988 1.988 0 0 1-.94.31z"/>
+                        </svg>
+                        English
+                    </button>
+                </li>
             </ul>
         </div>
     </nav>
 
     <!-- Главная секция -->
     <section class="hero" id="home">
+        <a href="index_en.html" class="language-switch floating">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 3.956h-.049l-.679 2.022H6.18z"/>
+                <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm7.138 9.995c.193.301.402.583.63.846-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6.066 6.066 0 0 1-.415-.492 1.988 1.988 0 0 1-.94.31z"/>
+            </svg>
+            English
+        </a>
         <div class="hero-content">
-            <h1>Платформа для создания тестов, анкет и опросов с AI-ассистентом</h1>
-            <p>Создавайте собственные исследования. AI-ассистент поможет вам сформулировать вопросы, настроить систему оценки и проанализировать результат.</p>
-            <a href="#constructor" class="cta-button">Создать тест</a>
-            <a href="#test" class="cta-button">Пройти пример теста</a>
+            <h1>Определите свое мнение</h1>
+            <p>Инновационный тест поможет вам определиться с вашей жизненной позицией. Он снован на анализе основных идеологических принципов современного мира и отобразит местоположение идей в трехмерном политическом пространстве</p>
+            <a href="#test" class="cta-button floating">Пройти тест</a>
         </div>
     </section>
 
-    <!-- Конструктор тестов -->
-    <section class="section constructor-section" id="constructor">
+    <!-- О проекте -->
+    <section class="section" id="about">
         <div class="container">
-            <h2 class="section-title">Конструктор тестов</h2>
-            <div class="constructor-container">
-                <div class="form-group">
-                    <label for="testTitle">Название теста:</label>
-                    <input type="text" id="testTitle" class="form-control" placeholder="Например: Маркетинговый профиль бренда" value="Маркетинговый профиль бренда">
+            <h2 class="section-title fade-in">О проекте</h2>
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <h3>🎯 Цель проекта</h3>
+                    <p> Создание современного инструмента для анализа не только политических, но и других взглядов людей в общественной жизни. Мы хотим создать большой конструктор, который поможет всем нам лучше друг друга узнавать.</p>
                 </div>
-                
-                <div class="form-group">
-                    <label for="testDescription">Описание теста:</label>
-                    <textarea id="testDescription" class="form-control" rows="3" placeholder="Опишите, что измеряет ваш тест">Этот тест оценивает маркетинговый профиль вашего бренда по температурной шкале от 1 до 10.</textarea>
+                <div class="card fade-in">
+                    <h3>📊 Научный подход</h3>
+                    <p>Тест основан на анализе ключевых политических теорий и идеологий, изучаемых в курсе политологии.</p>
                 </div>
-                
-                <div class="form-group">
-                    <label>Тип шкалы оценки:</label>
-                    <div style="display: flex; gap: 15px; margin-top: 10px;">
-                        <label style="display: flex; align-items: center; gap: 8px;">
-                            <input type="radio" name="scaleType" value="temperature" checked> Температурная шкала (1-10°C)
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px;">
-                            <input type="radio" name="scaleType" value="percentage"> Процентная шкала (0-100%)
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px;">
-                            <input type="radio" name="scaleType" value="points"> Балльная система (1-10 баллов)
-                        </label>
-                    </div>
+                <div class="card fade-in">
+                    <h3>🔬 Методология</h3>
+                    <p>Устаревшая модель двухмерной системы координат уже не отражает той идеологической реалии, которая существует в настоящий момент. Мы предлагаем свою концепцию, более современную, практичную и перспективную.</p>
                 </div>
-                
-                <!-- AI-ассистент -->
-                <div class="ai-assistant">
-                    <div class="ai-header">
-                        <div class="ai-icon">AI</div>
-                        <h3>AI-ассистент</h3>
-                    </div>
-                    <p>Нужна помощь с созданием вопросов? AI-ассистент может предложить варианты:</p>
-                    <div class="ai-suggestions">
-                        <div class="ai-suggestion" onclick="addAISuggestion('Насколько инновационен ваш продукт?')">Инновационность</div>
-                        <div class="ai-suggestion" onclick="addAISuggestion('Насколько эмоционально ваш бренд общается с аудиторией?')">Эмоциональность</div>
-                        <div class="ai-suggestion" onclick="addAISuggestion('Насколько премиальным воспринимается ваш бренд?')">Премиальность</div>
-                        <div class="ai-suggestion" onclick="addAISuggestion('Насколько ваш бренд соответствует современным трендам?')">Актуальность</div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="newQuestion">Добавить вопрос:</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="newQuestion" class="form-control" placeholder="Введите вопрос">
-                        <button id="addQuestionBtn" class="cta-button" style="padding: 10px 20px;">Добавить</button>
-                    </div>
-                </div>
-                
-                <div class="question-builder">
-                    <h3 style="margin-bottom: 15px;">Вопросы теста:</h3>
-                    <div id="questionsList">
-                        <!-- Вопросы будут добавляться сюда -->
-                    </div>
-                </div>
-                
-                <button id="createTestBtn" class="cta-button" style="width: 100%; margin-top: 20px;">Создать тест</button>
             </div>
         </div>
     </section>
 
-    <!-- Пример теста -->
+    <!-- Теория -->
+    <section class="section" id="theory">
+        <div class="container">
+            <h2 class="section-title fade-in">Важные аспекты</h2>
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <h3>🏛️ Конфиденциальность</h3>
+                    <p>Тест анонимен и безопасен. Наша задача-добиться вашей предрасположенности, чтобы вы отвечали на вопросы честно и не боясь, что вас осудят. Только отвечая честно, мы сможем приблизиться к истинному знанию.</p>
+                </div>
+                <div class="card fade-in">
+                    <h3>📈 Студенческий проект</h3>
+                    <p>Этот тест является только студенческим проектом, поэтому нам необходима помощь в виде вашег мнения. Если у вас есть какие-либо идеи или предложения то обязательно свяжитесь с нами.</p>
+                </div>
+                <div class="card fade-in">
+                    <h3>🎓 Образовательный</h3>
+                    <p>Проект способствует лучшему пониманию политических процессов и развивает критическое мышление, служа на благо человечеству.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Тест -->
     <section class="section test-section" id="test">
         <div class="container">
-            <h2 class="section-title">Пример теста: Маркетинговый профиль бренда</h2>
+            <!-- Демографическая анкета -->
+            <div class="demographic-form" id="demographicForm">
+                <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-dark); font-size: 28px;">Демографическая информация</h2>
+                
+                <div class="form-group">
+                    <label for="age">Возраст:</label>
+                    <input type="number" id="age" class="form-control" min="14" max="120" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gender">Пол:</label>
+                    <select id="gender" class="form-control" required>
+                        <option value="">Выберите пол</option>
+                        <option value="male">Мужской</option>
+                        <option value="female">Женский</option>
+                        <option value="other">Другой</option>
+                        <option value="prefer_not">Предпочитаю не указывать</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="education">Образование:</label>
+                    <select id="education" class="form-control" required>
+                        <option value="">Выберите образование</option>
+                        <option value="school">Среднее</option>
+                        <option value="college">Среднее специальное</option>
+                        <option value="university">Высшее</option>
+                        <option value="postgrad">Послевузовское</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="country">Страна проживания:</label>
+                    <input type="text" id="country" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Политическая активность:</label>
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 17px;">
+                            <input type="radio" name="activity" value="active" required> Активно участвую в политике
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 17px;">
+                            <input type="radio" name="activity" value="interested"> Интересуюсь, но не участвую
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 17px;">
+                            <input type="radio" name="activity" value="neutral"> Нейтрален
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; font-size: 17px;">
+                            <input type="radio" name="activity" value="not_interested"> Не интересуюсь политикой
+                        </label>
+                    </div>
+                </div>
+                
+                <button id="startTestBtn" class="cta-button" style="width: 100%; margin-top: 20px; font-size: 18px;">Начать тест</button>
+            </div>
             
-            <!-- Контейнер теста -->
-            <div class="test-container" id="testContainer">
+            <!-- Контейнер теста (изначально скрыт) -->
+            <div class="test-container" id="testContainer" style="display: none;">
+                <button class="reset-top-button" onclick="resetTest()" style="background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; color: var(--text-secondary); margin-bottom: 15px; font-size: 15px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                    </svg>
+                    Начать заново
+                </button>
+                
                 <div class="progress-container">
                     <div class="progress-label">
                         <span>Прогресс</span>
-                        <span id="progressText">0/5</span>
+                        <span id="progressText">0/24</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="progress"></div>
@@ -782,23 +1245,23 @@
                 </div>
                 
                 <div class="question-card">
-                    <div class="question-number">Вопрос <span id="currentQuestion">1</span> из 5</div>
+                    <div class="question-number">Вопрос <span id="currentQuestion">1</span> из 24</div>
                     <div class="question-text" id="question">
-                        Насколько инновационен ваш продукт?
+                        Государство должно играть ключевую роль в воспитании детей через семейную политику.
                     </div>
                     
                     <div class="slider-container">
-                        <div class="slider-value" id="sliderValue">5°C</div>
-                        <input type="range" min="1" max="10" step="1" value="5" class="slider" id="slider">
+                        <div class="slider-value" id="sliderValue">Нейтрально</div>
+                        <input type="range" min="-2" max="2" step="1" value="0" class="slider" id="slider">
                         <div class="slider-labels">
-                            <span>1°C<br>Традиционный</span>
-                            <span>5°C</span>
-                            <span>10°C<br>Инновационный</span>
+                            <span>Категорически<br>не согласен</span>
+                            <span>Нейтрально</span>
+                            <span>Полностью<br>согласен</span>
                         </div>
                     </div>
                     
                     <div class="required-message" id="requiredMessage">
-                        Пожалуйста, выберите значение
+                        Пожалуйста, выберите позицию ползунка
                     </div>
                     
                     <div class="button-container">
@@ -811,104 +1274,152 @@
                     </div>
                 </div>
             </div>
+            <!-- Результаты -->
+            <div id="graphContainer">
+                <div class="graph-header">
+                    <h2 class="graph-title">Ваши политические координаты</h2>
+                    <p class="graph-description">Жёлтая ромбовидная точка показывает вашу позицию. Вы можете вращать график, удерживая левую кнопку мыши.</p>
+                </div>
+                
+                <div id="graph"></div>
+            </div>
+            
+            <!-- Обертка для результатов (скрыта изначально) -->
+            <div id="resultsSection" style="display: none;">
+                <!-- Компактный блок результатов -->
+                <div class="results-container" id="resultsContainer">
+                    <!-- Результаты будут вставлены сюда -->
+                </div>
+
+                <!-- Блок интерпретации результатов -->
+                <div class="interpretation-card">
+                    <div class="interpretation-header">
+                        <h3 class="interpretation-title">Интерпретация ваших результатов</h3>
+                    </div>
+                    <div class="interpretation-body" id="interpretationContent">
+                        <!-- Контент интерпретации -->
+                    </div>
+                </div>
+                
+                <!-- Кнопки экспорта -->
+                <div class="export-buttons">
+                    <button id="downloadCSVBtn" class="export-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        CSV
+                    </button>
+                    <button id="downloadBtn" class="export-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        PNG
+                    </button>
+                    <button id="resetResultsBtn" class="export-button" onclick="resetTest()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                        </svg>
+                        Начать заново
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
-
-    <!-- Результаты -->
-    <section class="section" id="results">
+    
+    <!-- Секция обратной связи -->
+    <section class="section" id="feedback">
         <div class="container">
-            <h2 class="section-title">Результаты теста</h2>
-            
-            <div class="constructor-container">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <h3 style="color: var(--primary-dark); font-size: 28px;">Температура вашего бренда</h3>
-                    <p style="color: var(--text-secondary); font-size: 18px;">Результаты основаны на ваших ответах</p>
-                </div>
+            <div class="feedback-section">
+                <h2 class="feedback-title">Свяжитесь с нами</h2>
                 
-                <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: center;">
-                    <div>
-                        <div class="thermometer">
-                            <div class="thermometer-fill" id="thermometerFill" style="height: 50%;"></div>
-                            <div class="thermometer-bulb"></div>
-                            <div class="temperature-marks">
-                                <div class="temperature-mark">10°C</div>
-                                <div class="temperature-mark">8°C</div>
-                                <div class="temperature-mark">6°C</div>
-                                <div class="temperature-mark">4°C</div>
-                                <div class="temperature-mark">2°C</div>
-                                <div class="temperature-mark">0°C</div>
-                            </div>
-                        </div>
+                <div class="contact-info">
+                    <p>Если у вас есть вопросы, предложения или вы хотите оставить отзыв о проекте, свяжитесь с нами:</p>
+                    
+                    <div class="contact-links-container">
+                        <a href="mailto:politcompass3d@example.com" class="contact-link">
+                            <svg class="contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                            politcompass3d@example.com
+                        </a>
+                        
+                        <a href="https://t.me/politcompass3d" class="contact-link" target="_blank">
+                            <svg class="contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.78 5.42-.9 6.8-.06.67-.36.9-.86.56-2.49-1.73-3.57-2.84-5.79-4.56-.54-.45-.92-.67-.88-1.05.04-.37.58-.57 1.01-.84.11-.07 2.42-1.56 2.5-1.69.02-.03.03-.07.01-.11-.02-.03-.05-.04-.09-.03-.1.02-1.67 1.08-2.64 1.63-.34.19-.66.28-.85.28-.2 0-.5-.11-.38-.47.3-.94.9-2.96 1.14-3.9.13-.53.38-.72.77-.72.21 0 .43.05.64.16.54.29 3.69 2.46 4.02 2.77.35.33.61.48.96.48.12 0 .27-.03.39-.1.25-.16.27-.5.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16-.54.29-3.69 2.46-4.02 2.77-.35.33-.61.48-.96.48-.12 0-.27-.03-.39-.1-.25-.16-.27-.5-.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16-.54.29-3.69 2.46-4.02 2.77-.35.33-.61.48-.96.48-.12 0-.27-.03-.39-.1-.25-.16-.27-.5-.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16-.54.29-3.69 2.46-4.02 2.77-.35.33-.61.48-.96.48-.12 0-.27-.03-.39-.1-.25-.16-.27-.5-.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16-.54.29-3.69 2.46-4.02 2.77-.35.33-.61.48-.96.48-.12 0-.27-.03-.39-.1-.25-.16-.27-.5-.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16-.54.29-3.69 2.46-4.02 2.77-.35.33-.61.48-.96.48-.12 0-.27-.03-.39-.1-.25-.16-.27-.5-.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16-.54.29-3.69 2.46-4.02 2.77-.35.33-.61.48-.96.48-.12 0-.27-.03-.39-.1-.25-.16-.27-.5-.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16-.54.29-3.69 2.46-4.02 2.77-.35.33-.61.48-.96.48-.12 0-.27-.03-.39-.1-.25-.16-.27-.5-.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16-.54.29-3.69 2.46-4.02 2.77-.35.33-.61.48-.96.48-.12 0-.27-.03-.39-.1-.25-.16-.27-.5-.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16-.54.29-3.69 2.46-4.02 2.77-.35.33-.61.48-.96.48-.12 0-.27-.03-.39-.1-.25-.16-.27-.5-.27-.69l.19-2.76c.01-.24-.06-.47-.18-.67-.29-.48-.84-.75-1.36-.75-.22 0-.43.05-.64.16C1.29 4.46 0 5.52 0 5.52v10.96c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V8.52c0-1.1-.9-2-2-2h-7.36z"/>
+                            </svg>
+                            Telegram: @politcompass3d
+                        </a>
                     </div>
                     
-                    <div>
-                        <div class="temperature-value" id="temperatureValue">5°C</div>
-                        <div class="axis-label" id="temperatureLabel">Умеренная температура</div>
-                        
-                        <div class="results-container" style="margin-top: 30px;">
-                            <div class="axis-card">
-                                <div class="axis-header">
-                                    <div class="axis-icon">🔥</div>
-                                    <div class="axis-title">Теплота бренда</div>
-                                </div>
-                                <div class="axis-percent">60%</div>
-                                <div class="axis-label">Умеренно теплый</div>
-                            </div>
-                            
-                            <div class="axis-card">
-                                <div class="axis-header">
-                                    <div class="axis-icon">💡</div>
-                                    <div class="axis-title">Инновационность</div>
-                                </div>
-                                <div class="axis-percent">50%</div>
-                                <div class="axis-label">Средняя</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="background: #f8f9fa; border-radius: 16px; padding: 25px; margin-top: 30px;">
-                    <h4 style="color: var(--primary-dark); margin-bottom: 15px;">Интерпретация результатов</h4>
-                    <p id="interpretationText">Ваш бренд имеет умеренную температуру, что говорит о сбалансированном подходе к маркетингу. Вы не слишком консервативны, но и не рискуете чрезмерно. Это надежная позиция, но для роста可以考虑 более смелые стратегии.</p>
-                </div>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <button class="cta-button" onclick="resetTest()">Пройти тест заново</button>
-                    <button class="cta-button" onclick="shareResults()">Поделиться результатами</button>
+                    <p style="margin-top: 25px; font-style: italic; color: var(--text-secondary);">Мы ценим ваш вклад в развитие проекта!</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Кнопка разработчика (скрытая) -->
+    <button class="dev-mode-btn" id="devModeBtn">Режим разработчика</button>
+
     <script>
-        // Конфигурация теста по умолчанию
-        const defaultTestConfig = {
-            title: "Маркетинговый профиль бренда",
-            description: "Этот тест оценивает маркетинговый профиль вашего бренда по температурной шкале от 1 до 10.",
-            scaleType: "temperature",
+        // Конфигурация теста с весами вопросов
+        const testConfig = {
             questions: [
-                "Насколько инновационен ваш продукт?",
-                "Насколько эмоционально ваш бренд общается с аудиторией?",
-                "Насколько премиальным воспринимается ваш бренд?",
-                "Насколько ваш бренд соответствует современным трендам?",
-                "Насколько сильна лояльность ваших клиентов?"
+                { text: "Государство должно играть ключевую роль в воспитании детей через семейную политику.", axis: "z", weight: 3 },
+                { text: "В семье, как и в государстве, должен быть порядок — кто-то главный, кто-то поддерживает.", axis: "z", weight: 2 },
+                { text: "Легализация легких наркотиков дает государству больше возможностей контролировать их употребление.", axis: "z", weight: 3 },
+                { text: "Законы надо писать в парламенте, а не в храмах — религия и власть должны быть разделены.", axis: "z", weight: 1 },
+                { text: "Часть финансовой системы, а именно криптовалюты, должна регулироваться государством для обеспечения стабильности.", axis: "z", weight: 1 },
+                { text: "Государство имеет право ограничить свободу слова тех, кто распространяет дезинформацию в интернете.", axis: "z", weight: 5 },
+                { text: "Служба в армии должна быть обязательной для всех мужчин — так формируется дисциплина и патриотизм.", axis: "z", weight: 3 },
+                { text: "Вмешательство государства в личную сферу допустимо только для защиты граждан от насилия и преступлений.", axis: "z", weight: 3 },
+                { text: "Брачные договоры должны поощряться, так как это способ сделать брак более ответственным.", axis: "x", weight: 2 },
+                { text: "Забота о престарелых родителях — личная обязанность, а не задача государственных служб.", axis: "x", weight: 3 },
+                { text: "Кто кого любит, как одевается и о чем думает — личное дело каждого и не должно регулироваться законом.", axis: "x", weight: 4 },
+                { text: "Личное поведение, такое как отказ пристегнуться в машине, должно регулироваться законом.", axis: "x", weight: 1 },
+                { text: "Рождение детей следует планировать с учетом общественных ожиданий, а не личных амбиций.", axis: "x", weight: 2 },
+                { text: "Традиции — это личный выбор, а не обязанность.", axis: "x", weight: 2 },
+                { text: "Богатые должны платить больше налогов — это не зависть, а справедливость.", axis: "x", weight: 4 },
+                { text: "Если государство не дает четких ориентиров, человек вправе полностью игнорировать общественные установки и действовать в своих интересах.", axis: "x", weight: 5 },
+                { text: "Герцоги, бароны — это всё в музей. В современной стране титулы ни к чему.", axis: "y", weight: 2 },
+                { text: "Нации придумали, чтобы делить людей. Национальная идентичность — социальный конструкт, искусственно усиленный капитализмом.", axis: "y", weight: 4 },
+                { text: "Миграция угрожает нашей культуре, языку и традициям.", axis: "y", weight: 3 },
+                { text: "Национальность не должна влиять на то, как мы относимся к людям.", axis: "y", weight: 4 },
+                { text: "В международной политике интересы глобального сообщества важнее внутренних дел нации.", axis: "y", weight: 3 },
+                { text: "Детям с детства надо рассказывать, что Родину нужно любить.", axis: "y", weight: 2 },
+                { text: "Покупать иностранное, когда своё ничуть не хуже — значит предавать интересы собственной страны ради личной выгоды.", axis: "y", weight: 4 },
+                { text: "Образование за границей разрушает культурную связь с родной страной.", axis: "y", weight: 3 }
+            ],
+            ideologies: [
+                { name: "Либерализм", position: { x: 24, y: -6, z: -18 } },
+                { name: "Консерватизм", position: { x: 8, y: 10, z: 8 } },
+                { name: "Социализм", position: { x: -20, y: -10, z: -20 } },
+                { name: "Фашизм", position: { x: -21, y: 24, z: 24 } },
+                { name: "Анархизм", position: { x: 0, y: -24, z: -24 } }
             ]
         };
 
         // Глобальные переменные
-        let currentTestConfig = {...defaultTestConfig};
         let currentQuestion = 0;
-        let answers = Array(currentTestConfig.questions.length).fill(5);
-        let testCreated = false;
+        let coordinates = { x: 0, y: 0, z: 0 };
+        let sliderValues = Array(testConfig.questions.length).fill(0);
+        let hasAnswered = Array(testConfig.questions.length).fill(false);
+        let demographicData = {};
+        let closestIdeology = "";
+        let maxScores = { x: 0, y: 0, z: 0 };
+        let shuffledQuestions = [];
+        
+        // Рассчитаем максимальные значения по осям
+        testConfig.questions.forEach(q => {
+            maxScores[q.axis] += q.weight * 2; // Максимальный вклад вопроса = вес * 2
+        });
 
         // DOM элементы
-        const testTitle = document.getElementById("testTitle");
-        const testDescription = document.getElementById("testDescription");
-        const scaleTypeRadios = document.getElementsByName("scaleType");
-        const newQuestionInput = document.getElementById("newQuestion");
-        const addQuestionBtn = document.getElementById("addQuestionBtn");
-        const questionsList = document.getElementById("questionsList");
-        const createTestBtn = document.getElementById("createTestBtn");
+        const demographicForm = document.getElementById("demographicForm");
+        const testContainer = document.getElementById("testContainer");
+        const startTestBtn = document.getElementById("startTestBtn");
         const progressBar = document.getElementById("progress");
         const progressText = document.getElementById("progressText");
         const currentQuestionElement = document.getElementById("currentQuestion");
@@ -918,300 +1429,712 @@
         const prevBtn = document.getElementById("prevBtn");
         const nextBtn = document.getElementById("nextBtn");
         const requiredMessage = document.getElementById("requiredMessage");
-        const thermometerFill = document.getElementById("thermometerFill");
-        const temperatureValue = document.getElementById("temperatureValue");
-        const temperatureLabel = document.getElementById("temperatureLabel");
-        const interpretationText = document.getElementById("interpretationText");
+        const graphContainer = document.getElementById("graphContainer");
+        const graphElement = document.getElementById("graph");
+        const resultsContainer = document.getElementById("resultsContainer");
+        const interpretationContent = document.getElementById("interpretationContent");
+        const downloadCSVBtn = document.getElementById("downloadCSVBtn");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const devModeBtn = document.getElementById("devModeBtn");
+        const resultsSection = document.getElementById("resultsSection");
+
+        // Функция для нормализации координат
+        function normalizeCoordinates(coords) {
+            return {
+                x: Math.max(-24, Math.min(24, coords.x)),
+                y: Math.max(-24, Math.min(24, coords.y)),
+                z: Math.max(-24, Math.min(24, coords.z))
+            };
+        }
+
+        // Функция для перемешивания массива вопросов
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
 
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            // Загрузка вопросов по умолчанию
-            loadQuestions();
+            // Перемешиваем вопросы
+            shuffledQuestions = shuffleArray(testConfig.questions);
             
-            // Обработчики событий для конструктора
-            addQuestionBtn.addEventListener('click', addQuestion);
-            newQuestionInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    addQuestion();
+            // Проверка сохраненного прогресса
+            const savedProgress = localStorage.getItem('politicalTestProgress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                currentQuestion = progress.currentQuestion;
+                sliderValues = progress.sliderValues;
+                hasAnswered = progress.hasAnswered;
+                coordinates = progress.coordinates;
+                demographicData = progress.demographicData;
+                shuffledQuestions = progress.shuffledQuestions || shuffledQuestions;
+                
+                // Если тест завершен - показываем результаты
+                if (progress.testCompleted) {
+                    demographicForm.style.display = 'none';
+                    testContainer.style.display = 'none';
+                    graphContainer.style.display = 'block';
+                    resultsSection.style.display = 'block';
+                    renderGraph();
+                    renderIdeologyResults();
+                    renderInterpretation();
+                    
+                    // Прокрутка к результатам
+                    setTimeout(() => {
+                        graphContainer.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
+                } else {
+                    // Иначе показываем тест
+                    demographicForm.style.display = 'none';
+                    testContainer.style.display = 'block';
+                    updateQuestion();
+                }
+            }
+            
+            // Загрузка демографических данных из формы
+            startTestBtn.addEventListener('click', function() {
+                if (!validateDemographicForm()) {
+                    alert("Пожалуйста, заполните все поля демографической анкеты");
+                    return;
+                }
+                
+                demographicData = {
+                    age: document.getElementById("age").value,
+                    gender: document.getElementById("gender").value,
+                    education: document.getElementById("education").value,
+                    country: document.getElementById("country").value,
+                    activity: document.querySelector('input[name="activity"]:checked').value,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Анимация перехода
+                demographicForm.style.animation = 'slideOut 0.5s forwards';
+                setTimeout(() => {
+                    demographicForm.style.display = 'none';
+                    testContainer.style.display = 'block';
+                    testContainer.style.animation = 'slideIn 0.5s forwards';
+                    updateQuestion();
+                    saveProgress();
+                }, 500);
+            });
+            
+            // Клавиатурная навигация
+            document.addEventListener('keydown', function(e) {
+                // Навигация по вопросам
+                if (e.key === 'ArrowRight' && currentQuestion < testConfig.questions.length - 1) {
+                    nextQuestion();
+                } else if (e.key === 'ArrowLeft' && currentQuestion > 0) {
+                    prevQuestion();
+                }
+                
+                // Управление слайдером
+                if (document.activeElement === slider) {
+                    if (e.key === 'Enter') {
+                        nextQuestion();
+                    }
                 }
             });
             
-            createTestBtn.addEventListener('click', createTest);
+            // Экспорт в CSV
+            downloadCSVBtn.addEventListener('click', exportToCSV);
             
-            // Обработчик слайдера
-            slider.addEventListener("input", updateSliderValue);
+            // Обновление слайдера
+            slider.addEventListener("input", function() {
+                if (this.value == 0) {
+                    this.value = this.value < 0 ? -1 : 1;
+                }
+                updateSliderValue();
+                requiredMessage.style.display = "none";
+            });
             
-            // Инициализация теста
-            updateQuestion();
+            // Кнопка разработчика
+            devModeBtn.addEventListener('click', function() {
+                // Если демоформа видима, заполняем её
+                if (demographicForm.style.display !== 'none') {
+                    document.getElementById("age").value = 30;
+                    document.getElementById("gender").value = "male";
+                    document.getElementById("education").value = "university";
+                    document.getElementById("country").value = "Россия";
+                    document.querySelector('input[name="activity"][value="interested"]').checked = true;
+                    
+                    // Запускаем тест
+                    setTimeout(() => {
+                        startTestBtn.click();
+                        
+                        // Даем время на отображение теста
+                        setTimeout(fillTestAutomatically, 300);
+                    }, 100);
+                } else if (testContainer.style.display !== 'none') {
+                    // Если тест уже начат, заполняем его
+                    fillTestAutomatically();
+                }
+            });
         });
 
-        // Загрузка вопросов в список
-        function loadQuestions() {
-            questionsList.innerHTML = '';
-            currentTestConfig.questions.forEach((question, index) => {
-                const questionItem = document.createElement('div');
-                questionItem.className = 'question-item';
-                questionItem.innerHTML = `
-                    <div class="question-text">${question}</div>
-                    <button class="remove-question" onclick="removeQuestion(${index})">Удалить</button>
-                `;
-                questionsList.appendChild(questionItem);
-            });
-        }
-
-        // Добавление вопроса через AI-ассистент
-        function addAISuggestion(question) {
-            newQuestionInput.value = question;
-            addQuestion();
-        }
-
-        // Добавление нового вопроса
-        function addQuestion() {
-            const questionText = newQuestionInput.value.trim();
-            if (questionText) {
-                currentTestConfig.questions.push(questionText);
-                loadQuestions();
-                newQuestionInput.value = '';
-                
-                // Обновляем массив ответов
-                answers = Array(currentTestConfig.questions.length).fill(5);
-            }
-        }
-
-        // Удаление вопроса
-        function removeQuestion(index) {
-            currentTestConfig.questions.splice(index, 1);
-            loadQuestions();
-            
-            // Обновляем массив ответов
-            answers = Array(currentTestConfig.questions.length).fill(5);
-            
-            // Если тест активен, сбрасываем его
-            if (testCreated) {
-                resetTest();
-            }
-        }
-
-        // Создание теста
-        function createTest() {
-            // Получаем значения из формы
-            currentTestConfig.title = testTitle.value;
-            currentTestConfig.description = testDescription.value;
-            
-            // Получаем выбранный тип шкалы
-            for (const radio of scaleTypeRadios) {
-                if (radio.checked) {
-                    currentTestConfig.scaleType = radio.value;
-                    break;
+        // Заполнение теста автоматически (режим разработчика)
+        function fillTestAutomatically() {
+            // Проходим все вопросы
+            for (let i = 0; i <= shuffledQuestions.length; i++) {
+                if (i < shuffledQuestions.length) {
+                    // Устанавливаем текущий вопрос
+                    currentQuestion = i;
+                    
+                    // Устанавливаем случайное значение от -2 до 2, кроме 0
+                    const value = [ -2, -1, 1, 2 ][Math.floor(Math.random() * 4)];
+                    slider.value = value;
+                    sliderValues[i] = value;
+                    updateSliderValue();
+                    
+                    // Сохраняем ответ
+                    if (!hasAnswered[i]) {
+                        const question = shuffledQuestions[i];
+                        coordinates[question.axis] += value * question.weight;
+                        hasAnswered[i] = true;
+                    }
+                    
+                    // Обновляем отображение
+                    updateQuestion();
+                } else {
+                    // После последнего вопроса показываем результаты
+                    document.querySelector('.test-container').style.display = 'none';
+                    graphContainer.style.display = 'block';
+                    resultsSection.style.display = 'block';
+                    renderGraph();
+                    renderIdeologyResults();
+                    renderInterpretation();
+                    
+                    // Прокрутка к результатам
+                    setTimeout(() => {
+                        graphContainer.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
                 }
+                
+                // Сохраняем прогресс
+                saveProgress();
             }
-            
-            // Проверяем, что есть вопросы
-            if (currentTestConfig.questions.length === 0) {
-                alert("Добавьте хотя бы один вопрос для создания теста");
-                return;
-            }
-            
-            // Обновляем интерфейс теста
-            questionElement.textContent = currentTestConfig.questions[0];
-            progressText.textContent = `0/${currentTestConfig.questions.length}`;
-            
-            // Обновляем слайдер в зависимости от типа шкалы
-            if (currentTestConfig.scaleType === 'temperature') {
-                slider.min = 1;
-                slider.max = 10;
-                slider.value = 5;
-                updateSliderLabels("1°C\nТрадиционный", "5°C", "10°C\nИнновационный");
-            } else if (currentTestConfig.scaleType === 'percentage') {
-                slider.min = 0;
-                slider.max = 100;
-                slider.value = 50;
-                updateSliderLabels("0%\nМинимально", "50%", "100%\nМаксимально");
-            } else if (currentTestConfig.scaleType === 'points') {
-                slider.min = 1;
-                slider.max = 10;
-                slider.value = 5;
-                updateSliderLabels("1\nМинимально", "5", "10\nМаксимально");
-            }
-            
-            updateSliderValue();
-            
-            // Прокрутка к тесту
-            document.getElementById('test').scrollIntoView({ behavior: 'smooth' });
-            
-            // Устанавливаем флаг, что тест создан
-            testCreated = true;
-            
-            // Сбрасываем прогресс теста
-            resetTest();
         }
 
-        // Обновление подписей слайдера
-        function updateSliderLabels(left, center, right) {
-            const labels = document.querySelector('.slider-labels');
-            labels.innerHTML = `
-                <span>${left}</span>
-                <span>${center}</span>
-                <span>${right}</span>
-            `;
+        // Валидация демографической формы
+        function validateDemographicForm() {
+            return document.getElementById("age").value &&
+                   document.getElementById("gender").value &&
+                   document.getElementById("education").value &&
+                   document.getElementById("country").value &&
+                   document.querySelector('input[name="activity"]:checked');
+        }
+
+        // Сохранение прогресса
+        function saveProgress() {
+            const progress = {
+                currentQuestion,
+                sliderValues,
+                hasAnswered,
+                coordinates,
+                demographicData,
+                shuffledQuestions,
+                testCompleted: currentQuestion >= shuffledQuestions.length
+            };
+            localStorage.setItem('politicalTestProgress', JSON.stringify(progress));
+        }
+
+        // Сброс теста
+        function resetTest() {
+            if (confirm("Вы уверены, что хотите начать тест заново? Весь ваш прогресс будет потерян.")) {
+                localStorage.removeItem('politicalTestProgress');
+                location.reload();
+            }
         }
 
         // Обновление значения слайдера
         function updateSliderValue() {
             const value = parseInt(slider.value);
+            let label = "";
+            let color = "";
             
-            if (currentTestConfig.scaleType === 'temperature') {
-                sliderValueDisplay.textContent = `${value}°C`;
-            } else if (currentTestConfig.scaleType === 'percentage') {
-                sliderValueDisplay.textContent = `${value}%`;
-            } else if (currentTestConfig.scaleType === 'points') {
-                sliderValueDisplay.textContent = `${value} баллов`;
+            if (value < 0) {
+                label = value === -1 ? "Не согласен" : "Категорически не согласен";
+                color = "#e63946";
+            } else if (value > 0) {
+                label = value === 1 ? "Согласен" : "Полностью согласен";
+                color = "#1d3557";
+            } else {
+                label = "Нейтрально";
+                color = "#4361ee";
             }
             
-            // Сохраняем ответ
-            answers[currentQuestion] = value;
+            sliderValueDisplay.textContent = label;
+            sliderValueDisplay.style.color = color;
         }
 
         // Обновление прогресса
         function updateProgress() {
-            const progress = ((currentQuestion) / currentTestConfig.questions.length) * 100;
+            const progress = ((currentQuestion) / shuffledQuestions.length) * 100;
             progressBar.style.width = `${progress}%`;
-            progressText.textContent = `${currentQuestion}/${currentTestConfig.questions.length}`;
+            progressText.textContent = `${currentQuestion}/${shuffledQuestions.length}`;
             currentQuestionElement.textContent = currentQuestion + 1;
         }
 
         // Обновление вопроса
         function updateQuestion() {
-            if (currentTestConfig.questions.length > 0) {
-                questionElement.textContent = currentTestConfig.questions[currentQuestion];
-                slider.value = answers[currentQuestion];
-                updateSliderValue();
-                updateProgress();
-                prevBtn.disabled = currentQuestion === 0;
-                
-                // Анимация появления вопроса
-                const questionCard = document.querySelector('.question-card');
-                questionCard.style.animation = 'none';
-                setTimeout(() => {
-                    questionCard.style.animation = 'cardAppear 0.5s ease';
-                }, 10);
-            }
+            questionElement.textContent = shuffledQuestions[currentQuestion].text;
+            slider.value = sliderValues[currentQuestion];
+            updateSliderValue();
+            updateProgress();
+            prevBtn.disabled = currentQuestion === 0;
+            
+            // Анимация появления вопроса
+            const questionCard = document.querySelector('.question-card');
+            questionCard.style.animation = 'none';
+            setTimeout(() => {
+                questionCard.style.animation = 'cardAppear 0.5s ease';
+            }, 10);
         }
 
         // Переход к предыдущему вопросу
         function prevQuestion() {
             if (currentQuestion > 0) {
+                sliderValues[currentQuestion] = parseInt(slider.value);
+                
+                if (hasAnswered[currentQuestion]) {
+                    const question = shuffledQuestions[currentQuestion];
+                    coordinates[question.axis] -= sliderValues[currentQuestion] * question.weight;
+                    hasAnswered[currentQuestion] = false;
+                }
+                
                 currentQuestion--;
                 updateQuestion();
             }
+            saveProgress();
         }
 
         // Переход к следующему вопросу
         function nextQuestion() {
-            if (parseInt(slider.value) === 0 && currentTestConfig.scaleType === 'percentage') {
+            if (parseInt(slider.value) === 0) {
                 requiredMessage.style.display = "block";
                 requiredMessage.style.animation = 'shake 0.5s';
                 return;
             }
 
+            const value = parseInt(slider.value);
+            sliderValues[currentQuestion] = value;
+            
+            if (!hasAnswered[currentQuestion]) {
+                const question = shuffledQuestions[currentQuestion];
+                coordinates[question.axis] += value * question.weight;
+                hasAnswered[currentQuestion] = true;
+            }
+
             currentQuestion++;
 
-            if (currentQuestion < currentTestConfig.questions.length) {
+            if (currentQuestion < shuffledQuestions.length) {
                 updateQuestion();
             } else {
-                // Тест завершен, показываем результаты
-                showResults();
+                document.querySelector('.test-container').style.display = 'none';
+                graphContainer.style.display = 'block';
+                resultsSection.style.display = 'block';
+                renderGraph();
+                renderIdeologyResults();
+                renderInterpretation();
+                // Прокрутка к результатам
+                setTimeout(() => {
+                    graphContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 300);
             }
+            saveProgress();
         }
 
-        // Показ результатов
-        function showResults() {
-            // Скрываем контейнер теста
-            document.querySelector('.test-container').style.display = 'none';
+        // Отображение результатов идеологии
+        function renderIdeologyResults() {
+            // Нормализуем координаты для отображения
+            const normalizedCoords = normalizeCoordinates(coordinates);
             
-            // Прокрутка к результатам
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            const zPercent = Math.round(Math.abs(normalizedCoords.z) / 24 * 100);
+            const xPercent = Math.round(Math.abs(normalizedCoords.x) / 24 * 100);
+            const yPercent = Math.round(Math.abs(normalizedCoords.y) / 24 * 100);
             
-            // Вычисляем средний балл
-            const avgScore = answers.reduce((a, b) => a + b, 0) / answers.length;
+            const zLabel = normalizedCoords.z < 0 
+                ? "Либертарианец" 
+                : "Авторитарист";
+                
+            const xLabel = normalizedCoords.x < 0 
+                ? "Коллективист" 
+                : "Индивидуалист";
+                
+            const yLabel = normalizedCoords.y < 0 
+                ? "Интернационалист" 
+                : "Националист";
             
-            // Обновляем термометр в зависимости от типа шкалы
-            if (currentTestConfig.scaleType === 'temperature') {
-                const tempPercent = (avgScore / 10) * 100;
-                thermometerFill.style.height = `${tempPercent}%`;
-                temperatureValue.textContent = `${avgScore.toFixed(1)}°C`;
-                
-                // Определяем метку температуры
-                if (avgScore < 3) {
-                    temperatureLabel.textContent = "Холодный бренд";
-                    interpretationText.textContent = "Ваш бренд воспринимается как холодный и отстраненный. Рассмотрите возможность усиления эмоциональной составляющей в коммуникации.";
-                } else if (avgScore < 7) {
-                    temperatureLabel.textContent = "Умеренная температура";
-                    interpretationText.textContent = "Ваш бренд имеет сбалансированную температуру. Это надежная позиция, но для роста可以考虑 более смелые стратегии.";
-                } else {
-                    temperatureLabel.textContent = "Горячий бренд";
-                    interpretationText.textContent = "Ваш бренд горячий и эмоциональный! Вы хорошо соединяетесь с аудиторией на эмоциональном уровне.";
+            // Определяем ближайшую идеологию
+            let minDistance = Infinity;
+            testConfig.ideologies.forEach(ideology => {
+                const distance = Math.sqrt(
+                    Math.pow(normalizedCoords.x - ideology.position.x, 2) +
+                    Math.pow(normalizedCoords.y - ideology.position.y, 2) +
+                    Math.pow(normalizedCoords.z - ideology.position.z, 2)
+                );
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestIdeology = ideology.name;
                 }
-            } else if (currentTestConfig.scaleType === 'percentage') {
-                thermometerFill.style.height = `${avgScore}%`;
-                temperatureValue.textContent = `${avgScore.toFixed(1)}%`;
+            });
+
+            
+            // Создаем HTML для новых карточек
+            const resultsHTML = `
+                <div class="axis-card">
+                    <div class="axis-header">
+                        <div class="axis-icon">🏛️</div>
+                        <div class="axis-title">Государственное регулирование</div>
+                    </div>
+                    <div class="axis-percent">${zPercent}%</div>
+                    <div class="axis-label">${zLabel}</div>
+                    <div class="axis-description">
+                        ${normalizedCoords.z < 0 
+                            ? "Вы выступаете за минимальное вмешательство государства в жизнь граждан, поддерживаете личные свободы." 
+                            : "Вы считаете необходимым сильное государство, которое регулирует общественную жизнь для поддержания порядка."}
+                    </div>
+                </div>
                 
-                if (avgScore < 33) {
-                    temperatureLabel.textContent = "Низкий показатель";
-                } else if (avgScore < 66) {
-                    temperatureLabel.textContent = "Средний показатель";
-                } else {
-                    temperatureLabel.textContent = "Высокий показатель";
-                }
+                <div class="axis-card">
+                    <div class="axis-header">
+                        <div class="axis-icon">👥</div>
+                        <div class="axis-title">Общественные отношения</div>
+                    </div>
+                    <div class="axis-percent">${xPercent}%</div>
+                    <div class="axis-label">${xLabel}</div>
+                    <div class="axis-description">
+                        ${normalizedCoords.x < 0 
+                            ? "Вы цените общественные интересы выше личных, поддерживаете социальную солидарность и коллективные решения." 
+                            : "Вы ставите личную свободу и ответственность выше коллективных интересов, верите в личную инициативу."}
+                    </div>
+                </div>
                 
-                interpretationText.textContent = `Ваш общий показатель составляет ${avgScore.toFixed(1)}%. Это ${avgScore < 50 ? 'ниже' : 'выше'} среднего значения.`;
-            } else if (currentTestConfig.scaleType === 'points') {
-                const pointsPercent = (avgScore / 10) * 100;
-                thermometerFill.style.height = `${pointsPercent}%`;
-                temperatureValue.textContent = `${avgScore.toFixed(1)} баллов`;
+                <div class="axis-card">
+                    <div class="axis-header">
+                        <div class="axis-icon">🌍</div>
+                        <div class="axis-title">Национальная идентичность</div>
+                    </div>
+                    <div class="axis-percent">${yPercent}%</div>
+                    <div class="axis-label">${yLabel}</div>
+                    <div class="axis-description">
+                        ${normalizedCoords.y < 0 
+                            ? "Вы выступаете за международное сотрудничество, считаете культурный обмен важным для решения глобальных проблем." 
+                            : "Вы придаёте большое значение национальной идентичности, суверенитету и культурным традициям своей страны."}
+                    </div>
+                </div>
                 
-                if (avgScore < 4) {
-                    temperatureLabel.textContent = "Низкий результат";
-                } else if (avgScore < 7) {
-                    temperatureLabel.textContent = "Средний результат";
-                } else {
-                    temperatureLabel.textContent = "Высокий результат";
-                }
-                
-                interpretationText.textContent = `Ваш средний балл составляет ${avgScore.toFixed(1)} из 10.`;
-            }
+                <div class="ideology-match">
+                    <div class="match-title">Ближайшая идеология</div>
+                    <div class="match-value">${Math.round(100 - (minDistance / 50 * 100))}%</div>
+                    <div class="match-name">${closestIdeology}</div>
+                </div>
+            `;
+            
+            resultsContainer.innerHTML = resultsHTML;
         }
 
-        // Сброс теста
-        function resetTest() {
-            currentQuestion = 0;
-            answers = Array(currentTestConfig.questions.length).fill(
-                currentTestConfig.scaleType === 'percentage' ? 50 : 5
+        // Интерпретация результатов
+        function renderInterpretation() {
+            // Нормализуем координаты для отображения
+            const normalizedCoords = normalizeCoordinates(coordinates);
+            
+            interpretationContent.innerHTML = `
+                <p>Ваша политическая позиция представляет собой уникальную комбинацию взглядов по трём измерениям:</p>
+                
+                <ul>
+                    <li class="z-axis">
+                        <div class="axis-icon">🏛️</div>
+                        <div>
+                            <strong>Отношение к государственному регулированию:</strong>
+                            ${normalizedCoords.z < 0 
+                                ? "Вы либертарианец, выступающий за минимальное вмешательство государства в жизнь граждан." 
+                                : "Вы поддерживаете сильное государство и его регулирующую роль в общественной жизни."}
+                        </div>
+                    </li>
+                    
+                    <li class="x-axis">
+                        <div class="axis-icon">👥</div>
+                        <div>
+                            <strong>Отношение к общественным отношениям:</strong>
+                            ${normalizedCoords.x < 0 
+                                ? "Вы коллективист, ценящий общественные интересы выше личных и поддерживающий социальную солидарность." 
+                                : "Вы индивидуалист, ставящий личную свободу и ответственность на первое место."}
+                        </div>
+                    </li>
+                    
+                    <li class="y-axis">
+                        <div class="axis-icon">🌍</div>
+                        <div>
+                            <strong>Отношение к национальной идентичности:</strong>
+                            ${normalizedCoords.y < 0 
+                                ? "Вы интернационалист, поддерживающий глобальное сотрудничество и культурный обмен." 
+                                : "Вы националист, придающий большое значение национальной идентичности и суверенитету."}
+                        </div>
+                    </li>
+                </ul>
+                
+                <div class="ideology-highlight">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm4.5 0a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5 2.755C12.146 12.825 10.623 12 8 12s-4.146.826-5 1.755V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.245z"/>
+                    </svg>
+                    Эта комбинация формирует ваше уникальное видение идеального общества, которое ближе всего к идеологии <strong>${closestIdeology}</strong>.
+                </div>
+            `;
+        }
+
+        // Отрисовка графика
+        function renderGraph() {
+            // Нормализуем координаты для отображения
+            const normalizedCoords = normalizeCoordinates(coordinates);
+            
+            // Определяем цвет для ближайшей идеологии
+            const colors = {
+                "Либерализм": "#4361ee",
+                "Консерватизм": "#f72585",
+                "Социализм": "#ffd166",
+                "Фашизм": "#e63946",
+                "Анархизм": "#4ECDC4"
+            };
+            
+            const data = [
+                {
+                    mode: "markers",
+                    marker: { 
+                        size: 10, 
+                        color: "#FFD700", 
+                        symbol: "diamond",
+                        line: { width: 2, color: "#000" }
+                    },
+                    type: "scatter3d",
+                    x: [normalizedCoords.x],
+                    y: [normalizedCoords.y],
+                    z: [normalizedCoords.z],
+                    name: "Ваша позиция",
+                    hoverinfo: "x+y+z+text",
+                    text: ["Ваша позиция"]
+                }
+            ];
+
+            // Добавляем идеологии с облаками точек
+            testConfig.ideologies.forEach(ideology => {
+                const isClosest = ideology.name === closestIdeology;
+                
+                data.push({
+                    mode: "markers",
+                    marker: { 
+                        size: isClosest ? 14 : 10, 
+                        color: colors[ideology.name] || "#FF6B6B", 
+                        opacity: isClosest ? 0.8 : 0.5,
+                        symbol: "circle",
+                        line: isClosest ? { width: 2, color: "#000" } : {}
+                    },
+                    type: "scatter3d",
+                    x: generatePointCloud(ideology.position.x, 4),
+                    y: generatePointCloud(ideology.position.y, 4),
+                    z: generatePointCloud(ideology.position.z, 4),
+                    name: ideology.name,
+                    hoverinfo: "name",
+                    text: ideology.name
+                });
+            });
+
+            // Добавляем оси координат
+            data.push(
+                {
+                    mode: "lines",
+                    line: { color: "#4361ee", width: 6 },
+                    type: "scatter3d",
+                    x: [8, -8],
+                    y: [-8, -8],
+                    z: [-8, -8],
+                    name: "Ось X (Индивидуализм ↔ Коллективизм)",
+                    showlegend: false
+                },
+                {
+                    mode: "lines",
+                    line: { color: "#f72585", width: 6 },
+                    type: "scatter3d",
+                    x: [-8, -8],
+                    y: [-8, 8],
+                    z: [-8, -8],
+                    name: "Ось Y (Интернационализм ↔ Национализм)",
+                    showlegend: false
+                },
+                {
+                    mode: "lines",
+                    line: { color: "#ffd166", width: 6 },
+                    type: "scatter3d",
+                    x: [-8, -8],
+                    y: [-8, -8],
+                    z: [-8, 8],
+                    name: "Ось Z (Либертарианство ↔ Авторитаризм)",
+                    showlegend: false
+                }
             );
             
-            // Показываем контейнер теста
-            document.querySelector('.test-container').style.display = 'block';
+            const layout = {
+                title: '',
+                scene: {
+                    xaxis: {
+                        range: [-24, 24],
+                        title: 'Мы(→) - (←)Я',
+                        titlefont: { size: 14, color: '#4361ee' },
+                        showgrid: true,
+                        gridcolor: '#f0f0f0',
+                        zeroline: true,
+                        zerolinecolor: '#4361ee',
+                        zerolinewidth: 2,
+                    },
+                    yaxis: {
+                        range: [-24, 24],
+                        title: 'Интернационализм(←) - (→) Национализм',
+                        titlefont: { size: 14, color: '#f72585' },
+                        showgrid: true,
+                        gridcolor: '#f0f0f0',
+                        zeroline: true,
+                        zerolinecolor: '#f72585',
+                        zerolinewidth: 2,
+                    },
+                    zaxis: {
+                        range: [-24, 24],
+                        title: 'Авторитаризм(←) - (→)Либертарство ',
+                        titlefont: { size: 14, color: '#ffd166' },
+                        showgrid: true,
+                        gridcolor: '#f0f0f0',
+                        zeroline: true,
+                        zerolinecolor: '#ffd166',
+                        zerolinewidth: 2,
+                    },
+                    aspectratio: { x: 1, y: 1, z: 1 },
+                    camera: {
+                        eye: { x: 1.7, y: -1.7, z: 1.7 }
+                    },
+                    bgcolor: '#faf0e6'
+                },
+                margin: {
+                    l: 0,
+                    r: 0,
+                    b: 0,
+                    t: 0
+                },
+                legend: {
+                    orientation: "h",
+                    y: -0.15,
+                    x: 0.5,
+                    xanchor: 'center',
+                    font: { size: 15 }
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+
+            Plotly.newPlot('graph', data, layout, { responsive: true });
             
-            // Прокрутка к тесту
-            document.getElementById('test').scrollIntoView({ behavior: 'smooth' });
-            
-            updateQuestion();
+            // Обработчик кнопки сохранения графика
+            downloadBtn.onclick = () => {
+                Plotly.downloadImage('graph', {
+                    format: 'png',
+                    filename: 'политические_координаты',
+                    width: 1400,
+                    height: 900,
+                    scale: 2
+                });
+            };
         }
 
-        // Поделиться результатами
-        function shareResults() {
-            if (navigator.share) {
-                navigator.share({
-                    title: currentTestConfig.title,
-                    text: `Мой результат теста "${currentTestConfig.title}": ${temperatureValue.textContent}`,
-                    url: window.location.href
-                })
-                .catch(error => console.log('Ошибка при использовании Share API:', error));
-            } else {
-                // Fallback для браузеров без поддержки Share API
-                alert(`Скопируйте ссылку, чтобы поделиться результатами: ${window.location.href}`);
+        // Генерация облака точек для идеологии
+        function generatePointCloud(center, spread, count = 40) {
+            const points = [];
+            for (let i = 0; i < count; i++) {
+                points.push(center + (Math.random() * spread * 2 - spread));
             }
+            return points;
         }
+
+        // Экспорт результатов в CSV
+        function exportToCSV() {
+            const max = 24;
+            const normalizedCoords = normalizeCoordinates(coordinates);
+            const zPercent = Math.round(Math.abs(normalizedCoords.z) / max * 100);
+            const xPercent = Math.round(Math.abs(normalizedCoords.x) / max * 100);
+            const yPercent = Math.round(Math.abs(normalizedCoords.y) / max * 100);
+            
+            const zLabel = normalizedCoords.z < 0 ? "Либертарианец" : "Авторитарист";
+            const xLabel = normalizedCoords.x < 0 ? "Коллективист" : "Индивидуалист";
+            const yLabel = normalizedCoords.y < 0 ? "Интернационалист" : "Националист";
+            
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Параметр,Значение\n";
+            csvContent += `Дата прохождения теста,${new Date().toLocaleString()}\n`;
+            csvContent += `Возраст,${demographicData.age}\n`;
+            csvContent += `Пол,${demographicData.gender}\n`;
+            csvContent += `Образование,${demographicData.education}\n`;
+            csvContent += `Страна,${demographicData.country}\n`;
+            csvContent += `Политическая активность,${demographicData.activity}\n`;
+            csvContent += "\n";
+            csvContent += "Ось,Позиция,Процент\n";
+            csvContent += `Государственное регулирование,${zLabel},${zPercent}%\n`;
+            csvContent += `Общественные отношения,${xLabel},${xPercent}%\n`;
+            csvContent += `Национальная идентичность,${yLabel},${yPercent}%\n`;
+            csvContent += "\n";
+            csvContent += "Координаты,X,Y,Z\n";
+            csvContent += `Значение,${normalizedCoords.x},${normalizedCoords.y},${normalizedCoords.z}\n`;
+            csvContent += `Ближайшая идеология,${closestIdeology}`;
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "политические_координаты.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Наблюдатель за секциями для анимаций
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        document.querySelectorAll('.section-title').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Прокрутка навигации
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Эффект при прокрутке для навигации
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
     </script>
 </body>
 </html>
